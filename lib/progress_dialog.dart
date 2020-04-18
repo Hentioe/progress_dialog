@@ -6,7 +6,7 @@ enum ProgressDialogType { Normal, Download }
 String _dialogMessage = "Loading...";
 double _progress = 0.0, _maxProgress = 100.0;
 
-Widget _customBody;
+Widget Function() _customBodyBuilder;
 
 TextAlign _textAlign = TextAlign.left;
 Alignment _progressWidgetAlignment = Alignment.centerLeft;
@@ -37,12 +37,12 @@ class ProgressDialog {
       {ProgressDialogType type,
       bool isDismissible,
       bool showLogs,
-      Widget customBody}) {
+      Widget Function() customBodyBuilder}) {
     _context = context;
     _progressDialogType = type ?? ProgressDialogType.Normal;
     _barrierDismissible = isDismissible ?? true;
     _showLogs = showLogs ?? false;
-    _customBody = customBody ?? null;
+    _customBodyBuilder = customBodyBuilder ?? null;
   }
 
   void style(
@@ -193,7 +193,7 @@ class _BodyState extends State<_Body> {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 100.0,
-      child: _customBody ??
+      child: _customBodyBuilder() ??
           Row(
             children: <Widget>[
               const SizedBox(width: 8.0),
